@@ -1,0 +1,15 @@
+# base image
+# use FROM pytorch/torchserve:latest-cpu for cpu support
+FROM pytorch/torchserve:latest
+
+# install dependencies
+RUN pip install sentencepiece Pillow
+
+WORKDIR /app
+
+# copy model archive
+COPY model-store /app/model-store/
+COPY config.properties  /app/
+
+# run Torchserve upon running the container
+CMD ["torchserve", "--start","--models radiox5=radiox5.mar","--ts-config /app/config.properties"]
